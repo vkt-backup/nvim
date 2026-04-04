@@ -28,6 +28,7 @@ return {
 					"pylsp",
 					"phpactor",
 					"jdtls",
+					"zls"
 				},
 				auto_install = true,
 				ui = {
@@ -50,6 +51,8 @@ return {
 						"typescript",
 						"typescriptreact",
 						"svelte",
+						"astro",
+						"gopls",
 					},
 				},
 			},
@@ -57,11 +60,14 @@ return {
 		config = function()
 			local capabilities = require("cmp_nvim_lsp").default_capabilities()
 			local lspconfig = require("lspconfig")
-			lspconfig.ts_ls.setup({
+			local util = require "lspconfig/util"
+			lspconfig.tsserver.setup({
 				capabilities = capabilities,
+				filetypes = { "ts", "tsx", "js", "jsx" },
 			})
 			lspconfig.cssls.setup({
 				capabilities = capabilities,
+				filetypes = { "css", "scss" }
 			})
 			lspconfig.css_variables.setup({
 				capabilities = capabilities,
@@ -77,6 +83,7 @@ return {
 			})
 			lspconfig.html.setup({
 				capabilities = capabilities,
+				filetypes = { "html" },
 				settings = {
 					html = {
 						format = {
@@ -90,6 +97,7 @@ return {
 			})
 			lspconfig.tailwindcss.setup({
 				capabilities = capabilities,
+				filetypes = { "html", "astro", "jsx", "tsx" },
 			})
 			lspconfig.csharp_ls.setup({
 				capabilities = capabilities,
@@ -99,6 +107,24 @@ return {
 				root_dir = function(fname)
 					return vim.fn.getcwd()
 				end,
+			})
+			lspconfig.astro.setup({
+				capabilities = capabilities,
+				filetypes = "astro",
+			})
+			lspconfig.gopls.setup({
+				capabilities = capabilities,
+				filetypes = { "go", "gomod", "gowork", "gompl" },
+				root_dir = util.root_pattern("go.work", "go.mod", ".git"),
+				settings = {
+					gopls = {
+						completeUnimported = true,
+					},
+				},
+			})
+			lspconfig.zls.setup({
+				capabilities = capabilities,
+				filetypes = { "zig" },
 			})
 			ui = {
 				BORDER = "ROUNDED",
