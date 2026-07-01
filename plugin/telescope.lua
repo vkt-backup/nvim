@@ -8,7 +8,17 @@ vim.pack.add({
 	{ src = "https://github.com/nvim-lua/plenary.nvim" }
 })
 
-require("telescope").setup()
+require("telescope").setup({
+	defaults = {
+		find_command = {
+			"rg",
+			"--files",
+			"--hidden",
+			"-g",
+			"!.git"
+		}
+	}
+})
 
 -- Key mappings
 vim.keymap.set("n", "<leader>ff", "<CMD>Telescope find_files<CR>", { desc = "Telescope find files" })
